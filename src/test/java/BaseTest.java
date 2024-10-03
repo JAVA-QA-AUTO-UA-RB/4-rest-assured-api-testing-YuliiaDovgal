@@ -8,20 +8,20 @@ import org.testng.annotations.BeforeClass;
 import static io.restassured.RestAssured.given;
 
 public class BaseTest {
-    // Base URI for the Petstore API
+
     protected static final String BASE_URI = "https://jsonplaceholder.typicode.com";
     protected RequestSpecification requestSpec;
 
     @BeforeClass
     public void commonSetup() {
-        // Set the base URI for RestAssured
+
         RestAssured.baseURI = BASE_URI;
         RestAssured.filters(
                 new RequestLoggingFilter(LogDetail.ALL), // Logs all details of the request
                 new ResponseLoggingFilter(LogDetail.ALL) // Logs all details of the response
         );
 
-        // Create a Request Specification
+
         requestSpec = given()
                 .baseUri(BASE_URI)
                 .header("Content-Type", "application/json");

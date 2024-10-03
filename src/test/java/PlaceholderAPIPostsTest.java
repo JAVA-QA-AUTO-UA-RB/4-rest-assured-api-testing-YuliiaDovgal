@@ -1,30 +1,56 @@
-import org.testng.Assert;
 import org.testng.annotations.Test;
-
+import static org.hamcrest.Matchers.*;
 
 public class PlaceholderAPIPostsTest extends BaseTest {
 
-    // Під словом "Post" в назвах методів мається на увазі назва ресурсу (не плутати з HTTP методом POST
     @Test(groups = {"smoke", "regression"})
     public void testGetPost() {
-        // Ці dummy assertions використовується як заглушка для шаблону, обов*язково видаліть його після додавання реальної імплементації
-        Assert.assertTrue(true);
+
+        requestSpec
+                .when()
+                .get("/posts/1")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(1))
+                .body("title", notNullValue());
     }
 
     @Test(groups = "regression")
     public void testCreatePost() {
-        Assert.assertTrue(true);
+        String newPost = "{ \"title\": \"foo\", \"body\": \"bar\", \"userId\": 1 }";
+
+        requestSpec
+                .body(newPost)
+                .when()
+                .post("/posts")
+                .then()
+                .statusCode(201)
+                .body("title", equalTo("foo"))
+                .body("body", equalTo("bar"))
+                .body("userId", equalTo(1));
     }
 
     @Test(groups = "regression")
     public void testUpdatePost() {
-        Assert.assertTrue(true);
+        String updatedPost = "{ \"id\": 1, \"title\": \"updated\", \"body\": \"updated body\", \"userId\": 1 }";
+
+        requestSpec
+                .body(updatedPost)
+                .when()
+                .put("/posts/1")
+                .then()
+                .statusCode(200)
+                .body("title", equalTo("updated"))
+                .body("body", equalTo("updated body"));
     }
 
     @Test(groups = "regression")
     public void testDeletePost() {
-        Assert.assertTrue(true);
+
+        requestSpec
+                .when()
+                .delete("/posts/1")
+                .then()
+                .statusCode(200); // The API returns 200, though ideally it should be 204
     }
 }
-
-

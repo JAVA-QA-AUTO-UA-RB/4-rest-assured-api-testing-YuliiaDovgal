@@ -1,20 +1,31 @@
-import org.testng.Assert;
 import org.testng.annotations.Test;
-
+import static org.hamcrest.Matchers.*;
 
 public class PlaceholderAPIUsersTest extends BaseTest {
 
     @Test(groups = {"smoke", "regression"})
     public void testGetUserById() {
-        // Ці dummy assertions використовується як заглушка для шаблону, обов*язково видаліть його після додавання реальної імплементації
-        Assert.assertTrue(true);
+
+        requestSpec
+                .when()
+                .get("/users/1")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(1))
+                .body("username", notNullValue());
     }
 
     @Test(groups = "regression")
     public void testGetUserByUsername() {
-        Assert.assertTrue(true);
-    }
 
+        requestSpec
+                .when()
+                .get("/users?username=Bret")
+                .then()
+                .statusCode(200)
+                .body("[0].username", equalTo("Bret"))
+                .body("[0].email", notNullValue());
+    }
 }
 
 
